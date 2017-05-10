@@ -575,6 +575,10 @@ public class AuthorizationList {
             s.append("\nOS Patchlevel: ").append(osPatchLevel);
         }
 
+        if (attestationApplicationId != null) {
+            s.append("\nApplication ID:").append(attestationApplicationId.toString());
+        }
+
         return s.toString();
     }
 }

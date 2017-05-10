@@ -132,7 +132,8 @@ public class AttestationTest extends AsyncTask<Void, String, Void> {
         keyStore.deleteEntry(keystoreAlias);
 
         publishProgress("Generating key pair...");
-        Date startTime = new Date();
+        Date startTime = new Date(new Date().getTime() - 1000);
+        Log.d("****", "Start Time is: " + startTime.toString());
         Date originationEnd = new Date(startTime.getTime() + ORIGINATION_TIME_OFFSET);
         Date consumptionEnd = new Date(startTime.getTime() + CONSUMPTION_TIME_OFFSET);
         KeyGenParameterSpec.Builder builder = new KeyGenParameterSpec.Builder(keystoreAlias,

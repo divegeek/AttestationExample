@@ -81,7 +81,7 @@ public class RootOfTrust {
     @Override
     public String toString() {
         return new StringBuilder()
-                .append("\nVerified boot Key: ")
+                .append("Verified boot Key: ")
                 .append(BaseEncoding.base64().encode(verifiedBootKey))
                 .append("\nDevice locked: ")
                 .append(deviceLocked)

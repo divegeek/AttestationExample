@@ -37,9 +37,9 @@ import static android.security.keystore.KeyProperties.DIGEST_SHA256;
 import static android.security.keystore.KeyProperties.KEY_ALGORITHM_EC;
 
 /**
- * Created by swillden on 2/8/17.
+ * AttestationTest generates an EC Key pair, with attestation, and displays the result in the
+ * TextView provided to its constructor.
  */
-
 public class AttestationTest extends AsyncTask<Void, String, Void> {
     private static final int ORIGINATION_TIME_OFFSET = 1000000;
     private static final int CONSUMPTION_TIME_OFFSET = 2000000;
@@ -63,11 +63,11 @@ public class AttestationTest extends AsyncTask<Void, String, Void> {
     private static final int KM_ERROR_INVALID_INPUT_LENGTH = -21;
     private final TextView view;
 
-    public AttestationTest(TextView view) {
+    AttestationTest(TextView view) {
         this.view = view;
     }
 
-    public static final String GOOGLE_ROOT_CERTIFICATE =
+    private static final String GOOGLE_ROOT_CERTIFICATE =
             "-----BEGIN CERTIFICATE-----\n"
                     + "MIIFYDCCA0igAwIBAgIJAOj6GWMU0voYMA0GCSqGSIb3DQEBCwUAMBsxGTAXBgNV"
                     + "BAUTEGY5MjAwOWU4NTNiNmIwNDUwHhcNMTYwNTI2MTYyODUyWhcNMjYwNTI0MTYy"
@@ -119,8 +119,7 @@ public class AttestationTest extends AsyncTask<Void, String, Void> {
         }
     }
 
-
-    public void testEcAttestation() throws Exception {
+    private void testEcAttestation() throws Exception {
         String ecCurve = "secp256r1";
         int keySize = 256;
         byte[] challenge = "challenge".getBytes();

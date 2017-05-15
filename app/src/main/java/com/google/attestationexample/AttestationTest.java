@@ -17,6 +17,7 @@ import java.security.InvalidKeyException;
 import java.security.InvalidParameterException;
 import java.security.KeyPairGenerator;
 import java.security.KeyStore;
+import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.PrivateKey;
@@ -107,7 +108,7 @@ public class AttestationTest extends AsyncTask<Void, String, Void> {
         } catch (Exception e) {
             StringWriter s = new StringWriter();
             e.printStackTrace(new PrintWriter(s));
-            publishProgress(e.toString() + "\n" + s);
+            publishProgress(s.toString());
         }
         return null;
     }
@@ -202,12 +203,22 @@ public class AttestationTest extends AsyncTask<Void, String, Void> {
         }
 
         for (int i = 1; i < certChain.length; ++i) {
+            PublicKey pubKey = certChain[i].getPublicKey();
             try {
-                certChain[i - 1].verify(certChain[i].getPublicKey());
+                certChain[i - 1].verify(pubKey);
             } catch (InvalidKeyException | CertificateException | NoSuchAlgorithmException
                     | NoSuchProviderException | SignatureException e) {
                 throw new GeneralSecurityException("Failed to verify certificate "
                         + certChain[i - 1] + " with public key " + certChain[i].getPublicKey(), e);
+            }
+            if (i == certChain.length - 1) {
+                // Last cert is self-signed.
+                try {
+                    certChain[i].verify(pubKey);
+                } catch (CertificateException e) {
+                    throw new GeneralSecurityException(
+                            "Root cert " + certChain[i] + " is not correctly self-signed", e);
+                }
             }
         }
         publishProgress("Certificate chain signatures are valid\n");

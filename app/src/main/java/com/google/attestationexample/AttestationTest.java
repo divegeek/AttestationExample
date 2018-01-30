@@ -171,6 +171,9 @@ public class AttestationTest extends AsyncTask<Void, String, Void> {
         printKeyUsage(attestationCert);
 
         Attestation attestation = new Attestation(attestationCert);
+        if (!Arrays.equals(attestation.getAttestationChallenge(), challenge)) {
+            throw new GeneralSecurityException("challenge mismatch");
+        }
         publishProgress(attestation.toString() + "\n");
 
         Signature signer = Signature.getInstance("SHA256WithECDSA");
